@@ -1,7 +1,3 @@
-#include <iostream>
-
-using namespace std;
-
 // This function performs 2d max pooling for the given input
 //
 // @params:
@@ -12,7 +8,7 @@ using namespace std;
 //  pool_size: how large the pool are should be (pooling over an area of size pool_size * pool_size)
 void max_pool_2d(float* input, float* output, int input_side_length, int num_input_channels, int pool_size) {
     int i, j, k, m, n;
-    float max = -999999999;
+    float max = -99999;
     int chunk = input_side_length / pool_size;
     int count = 0;
 
@@ -28,7 +24,7 @@ void max_pool_2d(float* input, float* output, int input_side_length, int num_inp
 		    }
 		}
 		output[count] = max;
-		max = -999999999;
+		max = -99999;
 		count = count + 1;
 	    }	
 	}
