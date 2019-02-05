@@ -91,8 +91,16 @@ void relu(float* input, float* output, int input_side_length, int num_input_chan
 //  vector: a pointer to the memory start location containing the input vector (its length is matrix_w)
 //  output: a pointer to a chunk of allocated memory for output matrix (1D)
 //  matrix_l & matrix_w: specifies the size of the matrix
-void mat_mul(float* matrix, float* output, int matrix_l, int matrix_w) {
-
-
-
+void mat_mul(float* matrix, float* vector, float* output, int matrix_l, int matrix_w) {
+  int row, col, i;
+	float sum;
+	for (row = 0; row < matrix_l; row++)
+	{
+		sum = 0.0;
+		for (col = 0; col < matrix_w; col++)
+		{
+		  sum += (*(matrix + row * matrix_w + col)) * (*(vector + col));
+		}
+		*(output + row) = sum;
+	}
 }
