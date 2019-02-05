@@ -73,9 +73,14 @@ void max_pool_2d(float* input, float* output, int input_side_length, int num_inp
 //  input_side_length: specifies the length of one input side (assuming square input shape & divisible by 2)
 //  num_input_channels: specifies number of input channels (so that the total input size is input_side_length * input_side_length * num_input_channels)
 void relu(float* input, float* output, int input_side_length, int num_input_channels) {
-
-
-
+    total = input_side_length * input_side_length * num_input_channels;
+    for (int i = 0; i < total; i++) {
+        if (input[i] < 0) {
+            output[i] = -1 * input[i];
+        } else {
+            output[i] = input[i];
+        }
+    }
 }
 
 
