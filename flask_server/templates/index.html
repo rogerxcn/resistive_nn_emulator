@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Resistive NN Emulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+  </head>
+
+  <body>
+    <label for="image">Current Image:</label>
+    <canvas id="image" width="28" height="28" style="width:280px; height:280px;"></canvas>
+
+    <br>
+
+    <label>Current Image Tag: <a>{{ image_tag }}</a> </label>
+
+    <br>
+
+    <label>Predicted Image Tag: <a>{{ predict_image_tag }}</a> </label>
+
+    <br>
+
+    <label>Prediction Result: <a>{{ result }}</a> </label>
+
+
+    <script>
+      $(document).ready(function(){
+        // draw the current image onto the webpage
+          $.get("/get_current_image", function(result){
+
+            var result = JSON.parse(result);
+
+            ctx = $("#image")[0].getContext('2d');
+
+            // create imageData object
+            var img_data = ctx.createImageData(28, 28);
+
+            for (i = 0; i <img_data.data.length; i += 4) {
+              img_data.data[i+0] = result[i/4] * 255;
+              img_data.data[i+1] = result[i/4] * 255;
+              img_data.data[i+2] = result[i/4] * 255;
+              img_data.data[i+3] = 255;
+            }
+
+            // update canvas with new data
+            ctx.putImageData(img_data, 0, 0);
+
+          });
+      });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  </body>
+
+</html>
