@@ -24,6 +24,26 @@
 
     <label>Prediction Result: <a>{{ result }}</a> </label>
 
+    <br>
+
+    <label>Image Upload:</label>
+
+    <br>
+
+    <input class="file" id="img_upload" name="img_upload" type='file' />
+
+    <br>
+
+    <button id="submit_img">Upload</button>
+
+    <br>
+
+    <label>Uploaded Image:</label>
+
+    <br>
+
+    <canvas id="img_submitted" width="28" height="28" style="width:280px; height:280px;"></canvas>
+
 
     <script>
       $(document).ready(function(){
@@ -37,6 +57,8 @@
             // create imageData object
             var img_data = ctx.createImageData(28, 28);
 
+            var i;
+
             for (i = 0; i <img_data.data.length; i += 4) {
               img_data.data[i+0] = result[i/4] * 255;
               img_data.data[i+1] = result[i/4] * 255;
@@ -47,6 +69,32 @@
             // update canvas with new data
             ctx.putImageData(img_data, 0, 0);
 
+          });
+
+          $("#submit_img").click(function(){
+            const up_img = $("#img_upload").prop('files')[0];
+
+            var img = new Image();
+
+            ctx = $("#img_submitted")[0].getContext('2d');
+
+            img.onload = function() {
+              ctx.drawImage(img,0,0,28,28);
+
+              var ctx_data = ctx.getImageData(0, 0, 28, 28).data;
+
+              var img_data = [];
+
+              var i;
+              for (i = 0; i < 3136; i += 4) {
+                var pixel_data = Math.round(parseFloat(ctx_data[i]) / 255.0 * 1E6) / 1E6;
+                img_data.push(pixel_data);
+              }
+
+              console.log(img_data);
+            };
+
+            img.src = URL.createObjectURL(up_img);
           });
       });
 
