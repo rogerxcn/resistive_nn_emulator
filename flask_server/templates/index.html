@@ -12,17 +12,17 @@
     <label for="image">Current Image:</label>
     <canvas id="image" width="28" height="28" style="width:280px; height:280px;"></canvas>
 
-    <br>
+    <!-- <br>
 
-    <label>Current Image Tag: <a>{{ image_tag }}</a> </label>
+    <label>Current Image Tag: <a>{{ image_tag }}</a> </label> -->
 
     <br>
 
     <label>Predicted Image Tag: <a>{{ predict_image_tag }}</a> </label>
 
-    <br>
+    <!-- <br>
 
-    <label>Prediction Result: <a>{{ result }}</a> </label>
+    <label>Prediction Result: <a>{{ result }}</a> </label> -->
 
     <br>
 
@@ -91,7 +91,12 @@
                 img_data.push(pixel_data);
               }
 
-              console.log(img_data);
+              var post_data = {"img_data" : JSON.stringify(img_data)};
+              console.log(post_data);
+
+              $.post("/upload_image", post_data, function(result){
+                console.log(result);
+              });
             };
 
             img.src = URL.createObjectURL(up_img);

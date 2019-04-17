@@ -1,7 +1,6 @@
+from flask import Flask, jsonify, abort, request, make_response, url_for
+from flask import render_template, redirect
 import json, time, os
-from flask import Flask, render_template
-import netifaces as ni
-
 
 app = Flask(__name__)
 
@@ -62,6 +61,13 @@ def get_predict_image_tag():
 @app.route('/get_result')
 def get_result():
   return json.dumps(image_tag == predict_image_tag)
+
+@app.route('/upload_image', methods=['POST'])
+def upload_image():
+  img_data = request.form.get("img_data")
+  img_data = json.loads(img_data)
+  print(img_data)
+  return "SUCCESS"
 
 @app.route('/')
 def index():
