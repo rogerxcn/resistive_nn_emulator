@@ -2,8 +2,13 @@
 
 #include "nn_ops.hpp"
 #include <cstring>
+#include <string>
+#include <sstream>
+#include <iostream>
 
 using namespace std;
+
+#define USE_EXTERNAL_INPUT 0
 
 #define PRINT_IMAGE 0
 #define PRINT_CONV1_OUTPUT 0
@@ -12,7 +17,8 @@ using namespace std;
 #define PRINT_MAXPOOL2_OUTPUT 0
 #define PRINT_CONV3_OUTPUT 0
 #define PRINT_MAXPOOL3_OUTPUT 0
-#define PRINT_FC1_OUTPUT 1
+#define PRINT_FC1_OUTPUT 0
+#define PRINT_FINAL_OUTPUT 1
 
 AnalogIn analog_value(A0);
 
@@ -21,34 +27,45 @@ DigitalOut led(LED1);
 
 
 int main() {
-    // // ================================ FILE SYSTEM IO ======================
-    // // input matrix containing image values
-    // float* input = (float*)malloc(28*28*sizeof(float));
-    //
-    // // open image file
-    // FILE* img_file = fopen("/local/mnist_7_1.csv", "r");
-    //
-    // if (img_file == nullptr) {
-    //     printf("[ERROR] Specified file does not exist!\n");
-    //     return -1;
-    // }
-    //
-    // // parse file to array
-    // for (int i = 0; i < 28; i++) {
-    //     // scan first 27 values with format "%f,"
-    //     for (int j = 0; j < 27; j++) {
-    //         float next;
-    //         fscanf(img_file, "%f,", &next);
-    //         input[i*28+j] = next;
-    //     }
-    //     // scan the last value with format "%f\n"
-    //     float next;
-    //     fscanf(img_file, "%f\n", &next);
-    //     input[i*28+27] = next;
-    // }
-    //
-    // fclose(fp);
+#if USE_EXTERNAL_INPUT == 1
+    int temp_i = 0;
 
+    char arr[28*28*10];
+
+    while(1) {
+        if (temp_i >= 28*28*10) break;
+
+        char c = pc.getc();
+
+        if (c == 'A') break;
+
+        arr[temp_i] = c;
+        temp_i++;
+    }
+
+    arr[++temp_i] = '\0';
+
+    string input_str(arr);
+
+    float input[28*28];
+
+    istringstream iss(input_str);
+
+    for(int i = 0; i < 784; i++) {
+        float a << iss;
+        input[i] = a;
+    }
+
+    pc.printf("[");
+
+    for(int i = 0; i < 784; i++) {
+        pc.printf(", ");
+        pc.printf("%.6f", input[i]);
+    }
+
+    pc.printf("]F");
+
+#else
 
     // ================================= FIXED INPUT ===========================
     // This is a '7'
@@ -82,6 +99,8 @@ int main() {
         0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.474510,0.996078,0.811765,0.070588,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,
         0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000
     };
+
+#endif
 
 
 
@@ -414,9 +433,9 @@ int main() {
 
     for (int i = 0; i < 64; i++) {
         if (fc1_output[i] >= 0) {
-            fc2_input = 1.0;
+            fc2_input[i] = 1.0;
         } else {
-            fc2_input = 0;
+            fc2_input[i] = 0;
         }
     }
 
@@ -460,6 +479,16 @@ int main() {
 
     for (int i = 0; i < 10; i++) {
         final_output[i] /= sum;
+    }
+
+    if (PRINT_FINAL_OUTPUT) {
+        printf("\n========== final output ============\n");
+
+        for (int j = 0; j < 10; j++) {
+            printf("%.3f, ", final_output[i]);
+        }
+        printf("\n");
+
     }
 
     return 0;

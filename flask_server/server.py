@@ -69,6 +69,39 @@ def upload_image():
   print(img_data)
   return "SUCCESS"
 
+@app.route('/transmit_img_H2D'):
+def transmit_image_h2d:
+  ser = serial.Serial()
+  if ser.isOpen():
+    ser.close()
+  ser = serial.Serial('/dev/ttyS7', 9600)
+
+  for i in range(0, len(image)):
+      ser.write(str(image[i]))
+      ser.write(' ')
+
+  ser.write('A')
+
+  mbed_data = ""
+
+  while(1):
+      curr = ser.read()
+      if (curr == 'F'):
+        print(mbed_data)
+        break
+      mbed_data += curr
+
+  result = ""
+
+  while(1):
+      curr = ser.read()
+      if (curr == 'F'):
+        print(result)
+        break
+      result += curr
+
+
+
 @app.route('/')
 def index():
   return render_template('index.html', image_tag=str(image_tag), predict_image_tag=predict_image_tag, result=bool(image_tag == predict_image_tag))
