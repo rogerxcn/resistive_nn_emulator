@@ -45,8 +45,8 @@ image = [
         ]
 
 
-image_tag = 7
-predict_image_tag = 7
+predict_image_tag = 0
+probability = [0, 0, 0]
 
 @app.route('/get_current_image')
 def get_current_image():
@@ -56,19 +56,14 @@ def get_current_image():
 def get_current_image_tag():
   return json.dumps(image_tag)
 
-@app.route('/get_predict_image_tag')
-def get_predict_image_tag():
-  return json.dumps(predict_image_tag)
-
-@app.route('/get_result')
-def get_result():
-  return json.dumps(image_tag == predict_image_tag)
-
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
   img_data = request.form.get("img_data")
   img_data = json.loads(img_data)
-  print(img_data)
+  for i in range(0, len(image)):
+      image[i] = (img_data[i] - 0.1307) / 0.3081
+      # image[i] = img_data[i]
+  print(image)
   return "SUCCESS"
 
 @app.route('/transmit_img_H2D')
@@ -114,13 +109,29 @@ def transmit_image_h2d():
         break
       prob += curr
 
-  return mbed_data + "|" + result + "|" + prob
+  prob_arr = json.loads(prob)
+  sum = prob_arr[0] + prob_arr[1] + prob_arr[2]
+  prob_arr[0] /= sum
+  prob_arr[1] /= sum
+  prob_arr[2] /= sum
+
+  result_arr = json.loads(result)
+
+  # print(result_arr)
+
+  global predict_image_tag
+
+  predict_image_tag = result_arr.index(max(result_arr))
+
+  # print(predict_image_tag)
+
+  return result + "|" + prob
 
 
 
 @app.route('/')
 def index():
-  return render_template('index.html', image_tag=str(image_tag), predict_image_tag=predict_image_tag, result=bool(image_tag == predict_image_tag))
+  return render_template('index.html', predict_image_tag=predict_image_tag)
 
 
 

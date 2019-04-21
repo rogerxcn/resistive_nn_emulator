@@ -20,6 +20,8 @@ using namespace std;
 #define PRINT_FC1_OUTPUT 0
 #define PRINT_FINAL_OUTPUT 0
 
+Serial pc(USBTX, USBRX); // tx, rx
+
 AnalogIn in0(PA_4);
 AnalogIn in1(PA_5);
 AnalogIn in2(PA_6);
@@ -98,6 +100,8 @@ DigitalOut out64(PE_10);
 
 
 int main() {
+
+while(1) {
 #if USE_EXTERNAL_INPUT == 1
     int temp_i = 0;
 
@@ -131,8 +135,8 @@ int main() {
     pc.printf("[");
 
     for(int i = 0; i < 784; i++) {
-        pc.printf(", ");
         pc.printf("%.6f", input[i]);
+        pc.printf(", ");
     }
 
     pc.printf("]F");
@@ -651,6 +655,12 @@ int main() {
     #if USE_EXTERNAL_INPUT == 1
         pc.printf("[%.3f, %.3f, %.3f]P", final_output[0], final_output[1], final_output[2]);
     #endif
+
+    free(fc1_output);
+    free(fc2_input);
+    free(fc2_output);
+    free(final_output);
+}
 
     return 0;
 

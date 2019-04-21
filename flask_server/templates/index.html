@@ -5,44 +5,76 @@
     <title>Resistive NN Emulator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
   </head>
 
   <body>
-    <label for="image">Current Image:</label>
-    <canvas id="image" width="28" height="28" style="width:280px; height:280px;"></canvas>
+    <nav class="navbar navbar-light bg-light">
+      <span class="navbar-brand mb-0 h1">Neural Network Resistive Hardware Accelerator</span>
+    </nav>
+
+    <div style="margin:25px">
+
+      <h5>Current Image:</h5>
+
+      <br>
+
+      <canvas id="image" width="28" height="28" style="width:280px; height:280px;"></canvas>
+
+    </div>
 
     <!-- <br>
 
     <label>Current Image Tag: <a>{{ image_tag }}</a> </label> -->
 
-    <br>
+    <!-- <br> -->
 
-    <label>Predicted Image Tag: <a>{{ predict_image_tag }}</a> </label>
+    <div style="margin:25px">
+
+      <label>Predicted Image Tag: <span class="badge badge-warning">{{ predict_image_tag }}</span></label>
+
+    </div>
 
     <!-- <br>
 
     <label>Prediction Result: <a>{{ result }}</a> </label> -->
 
-    <br>
+    <!-- <br>
 
-    <label>Image Upload:</label>
+    <label>Image Upload:</label> -->
 
-    <br>
+    <!-- <br> -->
 
-    <input class="file" id="img_upload" name="img_upload" type='file' />
+    <!-- <input class="file" id="img_upload" name="img_upload" type='file' /> -->
 
-    <br>
+    <div style="margin:25px">
 
-    <button id="submit_img">Upload</button>
+      <br>
 
-    <br>
+      <span id="new_image_span" style="display:none">
 
-    <label>Uploaded Image:</label>
+        <h5 id="nh5">New Image:</h5>
 
-    <br>
+        <br>
 
-    <canvas id="img_submitted" width="28" height="28" style="width:280px; height:280px;"></canvas>
+        <canvas id="img_submitted" width="28" height="28" style="width:280px; height:280px;"></canvas>
+
+      </span>
+
+      <br>
+
+      <label class="btn btn-secondary btn-sm" style="margin: 0">
+        Browse Files <input type="file" id="img_upload" name="img_upload" hidden>
+      </label>
+
+      <button id="submit_img" class="btn btn-primary btn-sm">
+        <span id="btn_text">Upload</span>
+        <span class="spinner-border spinner-border-sm" id="spinner" hidden></span>
+      </button>
+
+    </div>
+
+    <!-- <br> -->
 
 
     <script>
@@ -72,6 +104,13 @@
           });
 
           $("#submit_img").click(function(){
+            $('#spinner').removeAttr('hidden');
+            // $('#nh5').removeAttr('hidden');
+            // $('#img_submitted').removeAttr('hidden');
+            $('#new_image_span').show(250);
+
+            $('#btn_text').html('Sending Image to MCU')
+
             const up_img = $("#img_upload").prop('files')[0];
 
             var img = new Image();
@@ -96,6 +135,10 @@
 
               $.post("/upload_image", post_data, function(result){
                 console.log(result);
+                $.get("/transmit_img_H2D", function(res) {
+                  console.log(res);
+                  location.reload();
+                });
               });
             };
 
@@ -104,8 +147,8 @@
       });
 
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
   </body>
 
 </html>
