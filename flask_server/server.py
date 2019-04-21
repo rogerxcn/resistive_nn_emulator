@@ -46,7 +46,8 @@ image = [
 
 
 predict_image_tag = 0
-probability = [0, 0, 0]
+measured_voltage = ['<0 V>', '<0 V>', '<0 V>']
+probability = ['<Digit 0: 0 %>', '<Digit 1: 0 %>', '<Digit 2: 0 %>']
 
 @app.route('/get_current_image')
 def get_current_image():
@@ -117,11 +118,21 @@ def transmit_image_h2d():
 
   result_arr = json.loads(result)
 
+  global measured_voltage
+  measured_voltage[0] = '<  ' + str(round(result_arr[0], 4))+' V  >'
+  measured_voltage[1] = '<  ' + str(round(result_arr[1], 4))+' V  >'
+  measured_voltage[2] = '<  ' + str(round(result_arr[2], 4))+' V  >'
+
   # print(result_arr)
 
   global predict_image_tag
 
   predict_image_tag = result_arr.index(max(result_arr))
+
+  global probability
+  probability[0] = '<  Digit 0: ' + str(round(prob_arr[0], 4)*100)+' %  >'
+  probability[1] = '<  Digit 1: ' + str(round(prob_arr[1], 4)*100)+' %  >'
+  probability[2] = '<  Digit 2: ' + str(round(prob_arr[2], 4)*100)+' %  >'
 
   # print(predict_image_tag)
 
@@ -131,7 +142,7 @@ def transmit_image_h2d():
 
 @app.route('/')
 def index():
-  return render_template('index.html', predict_image_tag=predict_image_tag)
+  return render_template('index.html', predict_image_tag=predict_image_tag, probability=str(probability), measured_voltage=str(measured_voltage))
 
 
 
