@@ -72,18 +72,18 @@ def transmit_image_h2d():
   ser = serial.Serial()
   if ser.isOpen():
     ser.close()
-  ser = serial.Serial('/dev/ttyS7', 9600)
+  ser = serial.Serial('/dev/ttyS5', 115200)
 
   for i in range(0, len(image)):
-      ser.write(str(round(image[i], 3)))
-      ser.write(' ')
+      ser.write(str(round(image[i], 3)).encode())
+      ser.write(' '.encode())
 
-  ser.write('A')
+  ser.write('A'.encode())
 
   mbed_data = ""
 
   while(1):
-      curr = ser.read()
+      curr = ser.read().decode()
       if (curr == 'F'):
         print("Input Image: ")
         print(mbed_data)
@@ -93,7 +93,7 @@ def transmit_image_h2d():
   result = ""
 
   while(1):
-      curr = ser.read()
+      curr = ser.read().decode()
       if (curr == 'I'):
         print("Result: ")
         print(result)
@@ -103,7 +103,7 @@ def transmit_image_h2d():
   prob = ""
 
   while(1):
-      curr = ser.read()
+      curr = ser.read().decode()
       if (curr == 'P'):
         print("Probability: ")
         print(prob)
@@ -113,7 +113,7 @@ def transmit_image_h2d():
   exec_time_mcu = ""
 
   while(1):
-      curr = ser.read()
+      curr = ser.read().decode()
       if (curr == 'T'):
         print("Exec Time on MCU: ")
         print(exec_time_mcu + " us")
@@ -129,9 +129,9 @@ def transmit_image_h2d():
   result_arr = json.loads(result)
 
   global measured_voltage
-  measured_voltage[0] = '<  ' + str(round(result_arr[0], 4))+' V  >'
-  measured_voltage[1] = '<  ' + str(round(result_arr[1], 4))+' V  >'
-  measured_voltage[2] = '<  ' + str(round(result_arr[2], 4))+' V  >'
+  measured_voltage[0] = '<  ' + str(round(result_arr[0]*3.3, 4))+' V  >'
+  measured_voltage[1] = '<  ' + str(round(result_arr[1]*3.3, 4))+' V  >'
+  measured_voltage[2] = '<  ' + str(round(result_arr[2]*3.3, 4))+' V  >'
 
   # print(result_arr)
 
@@ -140,9 +140,9 @@ def transmit_image_h2d():
   predict_image_tag = result_arr.index(max(result_arr))
 
   global probability
-  probability[0] = '<  Digit 0: ' + str(round(prob_arr[0], 4)*100)+' %  >'
-  probability[1] = '<  Digit 1: ' + str(round(prob_arr[1], 4)*100)+' %  >'
-  probability[2] = '<  Digit 2: ' + str(round(prob_arr[2], 4)*100)+' %  >'
+  probability[0] = '<  Digit 0: ' + str(round(prob_arr[0]*100, 2))+' %  >'
+  probability[1] = '<  Digit 1: ' + str(round(prob_arr[1]*100, 2))+' %  >'
+  probability[2] = '<  Digit 2: ' + str(round(prob_arr[2]*100, 2))+' %  >'
 
   # print(predict_image_tag)
 
@@ -161,4 +161,4 @@ def draw():
 
 
 if __name__ == '__main__':
-  app.run(debug=True, host='0.0.0.0')
+  app.run(debug=False, host='0.0.0.0')
