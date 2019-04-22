@@ -14,13 +14,19 @@
       <a class="nav-link" href="/draw" target="_blank">Draw</a>
     </nav>
 
-    <div style="margin:25px">
+    <div style="margin:25px; float: left; width: 45%;">
 
       <h5>Current Image:</h5>
 
       <br>
 
       <canvas id="image" width="28" height="28" style="width:280px; height:280px;"></canvas>
+
+      <br>
+
+      <label>Predicted Image Tag: <span class="badge badge-warning">{{ predict_image_tag }}</span></label> <br>
+      <label>Measured Voltage: <span class="badge badge-warning">{{ measured_voltage }}</span></label> <br>
+      <label>Probability of Each Class: <span class="badge badge-warning">{{ probability }}</span></label>
 
     </div>
 
@@ -30,13 +36,11 @@
 
     <!-- <br> -->
 
-    <div style="margin:25px">
+    <!-- <div style="margin:25px">
 
-      <label>Predicted Image Tag: <span class="badge badge-warning">{{ predict_image_tag }}</span></label> <br>
-      <label>Measured Voltage: <span class="badge badge-warning">{{ measured_voltage }}</span></label> <br>
-      <label>Probability of Each Class: <span class="badge badge-warning">{{ probability }}</span></label>
 
-    </div>
+
+    </div> -->
 
     <!-- <br>
 
@@ -50,9 +54,7 @@
 
     <!-- <input class="file" id="img_upload" name="img_upload" type='file' /> -->
 
-    <div style="margin:25px">
-
-      <br>
+    <div style="margin:25px; float: left; width: 45%;">
 
       <span id="new_image_span" style="display:none">
 
@@ -76,6 +78,7 @@
       </button>
 
     </div>
+
 
     <!-- <br> -->
 
