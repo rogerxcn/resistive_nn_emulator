@@ -62,7 +62,7 @@ def upload_image():
   img_data = request.form.get("img_data")
   img_data = json.loads(img_data)
   for i in range(0, len(image)):
-      image[i] = (img_data[i] - 0.1307) / 0.3081
+      image[i] = round((img_data[i] - 0.1307) / 0.3081, 6)
       # image[i] = img_data[i]
   print(image)
   return "SUCCESS"
@@ -75,7 +75,7 @@ def transmit_image_h2d():
   ser = serial.Serial('/dev/ttyS7', 9600)
 
   for i in range(0, len(image)):
-      ser.write(str(image[i]))
+      ser.write(str(round(image[i], 3)))
       ser.write(' ')
 
   ser.write('A')
@@ -110,6 +110,16 @@ def transmit_image_h2d():
         break
       prob += curr
 
+  exec_time_mcu = ""
+
+  while(1):
+      curr = ser.read()
+      if (curr == 'T'):
+        print("Exec Time on MCU: ")
+        print(exec_time_mcu + " us")
+        break
+      exec_time_mcu += curr
+
   prob_arr = json.loads(prob)
   sum = prob_arr[0] + prob_arr[1] + prob_arr[2]
   prob_arr[0] /= sum
@@ -143,6 +153,10 @@ def transmit_image_h2d():
 @app.route('/')
 def index():
   return render_template('index.html', predict_image_tag=predict_image_tag, probability=str(probability), measured_voltage=str(measured_voltage))
+
+@app.route('/draw')
+def draw():
+  return render_template('draw.html')
 
 
 

@@ -135,7 +135,7 @@ while(1) {
     pc.printf("[");
 
     for(int i = 0; i < 784; i++) {
-        pc.printf("%.6f", input[i]);
+        pc.printf("%.1f", input[i]);
         pc.printf(", ");
     }
 
@@ -616,7 +616,15 @@ while(1) {
     float* fc2_output = (float*) malloc(10*sizeof(float));
     float* final_output = (float*) malloc(10*sizeof(float));
 
+    Timer t;
+
+    t.start();
+
     mat_mul(fc2_weight, fc2_input, fc2_output, 10, 64);
+
+    t.stop();
+
+    float duration = t.read_us();
 
     float fc2_bias[10] = {0.054,0.142,-0.045,0.098,-0.077,0.448,0.073,-1.124,2.025,-0.184};
 
@@ -654,6 +662,7 @@ while(1) {
 
     #if USE_EXTERNAL_INPUT == 1
         pc.printf("[%.3f, %.3f, %.3f]P", final_output[0], final_output[1], final_output[2]);
+        pc.printf("%.3fT", (float)duration);
     #endif
 
     free(fc1_output);

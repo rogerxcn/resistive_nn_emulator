@@ -1,4 +1,28 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Draw Your Digit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  </head>
+
+
+   <body onload="init()">
+     <div style="margin:25px">
+       <h5>Draw your own hand-written digit!</h5>
+       <br>
+       <canvas id="can" width="280" height="280"></canvas>
+       <br>
+       <input type="button" class="btn btn-primary btn-sm" value="save" id="btn" size="30" onclick="save()">
+       <input type="button" class="btn btn-secondary btn-sm" value="clear" id="clr" size="23" onclick="erase()">
+     </div>
+
+     <img id="canvasimg" style="position:absolute;top:10%;left:52%;display:none;">
+   </body>
+
+
    <script type="text/javascript">
        /**
     * Hermite resize - fast image resize/resample using Hermite filter. 1 cpu version!
@@ -173,10 +197,8 @@
        }
    }
    </script>
-   <body onload="init()">
-       <canvas id="can" width="280" height="280" style="position:absolute;top:10%;left:10%;border:2px solid;"></canvas>
-       <img id="canvasimg" style="position:absolute;top:10%;left:52%;" style="display:none;">
-       <input type="button" value="save" id="btn" size="30" onclick="save()" style="position:absolute;top:55%;left:10%;">
-       <input type="button" value="clear" id="clr" size="23" onclick="erase()" style="position:absolute;top:55%;left:15%;">
-   </body>
-   </html>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+
+</html>
