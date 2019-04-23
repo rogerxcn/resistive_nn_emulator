@@ -72,7 +72,7 @@ def transmit_image_h2d():
   ser = serial.Serial()
   if ser.isOpen():
     ser.close()
-  ser = serial.Serial('/dev/ttyS5', 115200)
+  ser = serial.Serial('/dev/ttyS5', 921600)
 
   for i in range(0, len(image)):
       ser.write(str(round(image[i], 3)).encode())
