@@ -1,0 +1,54 @@
+dbody,td,th {
+	font-family: Courier New, Courier, monospace;
+	color: #000000;
+}
+
+
+div {
+    background-color:transparent;
+}
+
+.style4 {
+	font-size: 32px;
+	font-weight: bold;
+	color: rgb(255,255,255);
+}
+
+.style5 {
+	font-size: 22px;
+	font-weight: bold;
+	color: rgb(255,255,255);
+}
+
+.style6 {
+	font-size: 20px;
+	color: rgb(255,255,255);
+}
+
+.style7 {
+	font-size: 15px;
+	color: #FF00FF;
+}
+
+canvas{
+	position: absolute;
+	top:0;
+	left:0;
+	z-index:-1;
+}
+
+.tab {
+	display: inline-block;
+	background-color: transparent;
+	margin: 5px;
+	padding: 20px;
+	border-radius: 30px 30px;
+	color: #00f60f;
+}
+
+.tab:hover {
+	background-color: green;
+	color: #ffed10;
+}
+
+

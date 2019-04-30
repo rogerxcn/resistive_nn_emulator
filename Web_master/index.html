@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="utf-8">
+		<title>ECE 4012: Emulating Resistive Neural Network</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript">
+			var particles = [];
+			var elements = [];
+			var freeElements = [];
+			var MAX_X_VELOCITY = 2, MIN_SIZE = 3, MAX_SIZE = 8;
+			var lastTimestamp = Date.now();
+			var lastMove = Date.now();
+			var MAX_PARTICLES = 500;
+			function Particle(x, y) {
+				this.x = x;
+				this.y = y;
+				this.vx = (Math.random() * 2 - 1) * MAX_X_VELOCITY;
+				this.vy = 0;
+				this.ay = 10;
+				this.remainingLife = 500;
+						
+				var size = Math.round(Math.random() * (MAX_SIZE - MIN_SIZE)) + MIN_SIZE;
+				this.element = elements[freeElements[0]];
+				this.elementIndex = freeElements[0];
+				freeElements.splice(0, 1);
+				this.element.style.width = size + "px";
+				this.element.style.height = size + "px";
+				this.element.style.borderRadius = size + "px";
+				this.element.style.background = "#a8ff00";
+				this.element.style.opacity = 1;
+				this.element.style.left = this.x + "px";
+				this.element.style.top = this.y + "px";
+			}
+					
+			var animateParticles = (timestamp) => {
+				var delta = timestamp - lastTimestamp;
+				lastTimestamp = timestamp;
+				
+				for(var i=0; i<particles.length; i++) {
+					particles[i].vy += particles[i].ay * delta / 1000;
+					particles[i].remainingLife -= delta;
+					particles[i].x += particles[i].vx;
+					particles[i].y += particles[i].vy;
+					particles[i].element.style.left = particles[i].x + "px";
+					particles[i].element.style.top = particles[i].y + "px";
+					if(particles[i].remainingLife < 200) {
+						particles[i].element.style.opacity = particles[i].remainingLife / 200;
+					}
+					if(particles[i].remainingLife < 0) {
+						particles[i].element.style.top = "0px";
+						particles[i].element.style.left = "0px";
+						freeElements.push(particles[i].elementIndex);
+						particles.splice(particles[i], 1);
+						i--;
+					}
+				}
+				window.requestAnimationFrame(animateParticles);
+			}
+			window.requestAnimationFrame(animateParticles);
+					
+			window.onload = () => {
+			
+				for(var i=0; i<MAX_PARTICLES; i++) {
+					elements.push(document.createElement('div'));
+					document.body.appendChild(elements[i]);
+					elements[i].style.opacity = 0;
+					elements[i].style.position = "absolute";
+					freeElements.push(i);
+				}
+				window.onmousemove = (e) => {
+					if(Date.now() - lastMove > 30) {
+						lastMove = Date.now();
+						particles.push(new Particle(e.clientX+6, e.clientY+12+window.scrollY));
+					}
+				};
+			};
+		</script>
+</style></head><body background="NN.jpg">
+
+<p class="style4" align="center">Emulating NN with Resistor Network</p>
+<p class="style4" align="center">ECE4012 - Advisor: Dr. Shiming Yu</p>
+<hr>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr> 
+    <td width="49%" height="198"> 
+      <p class="style5">Technical Review Papers</p>
+      <blockquote> 
+        <p class="style6">Yunfeng Xin <a class="tab" href="TRP_Yunfeng_Xin.pdf">.pdf</a></p>
+        <p class="style6">William Scott <a class="tab" href="TRPCameron.pdf">.pdf</a></p>
+        <p class="style6">Runfeng Chen <a class="tab" href="TRPKevin.pdf">.pdf</a></p>
+        <p class="style6">William Trimmer <a class="tab" href="TRP_William_Trimmer.pdf">.pdf</a></p>
+        <p class="style6">Zheyuan Xu <a class="tab" href="TRPJoshua.pdf">.pdf</a></p>
+	    <p class="style6">Sho Ko <a class="tab" href="TRP_Sho_Ko.pdf">.pdf</a></p>
+      </blockquote>
+    </td>
+    <td width="51%" height="198"> 
+      <div align="left">
+        <p class="style7", align="center"><a href="poster.png"><img src="poster.png" width="1000" height="800" border="0"></a><br>
+          Our poster used for the design Expo</p>
+      </div>
+    </td>
+  </tr>
+</table>
+<p class="style5">&nbsp;</p>
+<p class="style5">Project Proposal <a class="tab" href="ECE4011_Project_Proposal.docx">.docx</a>
+  <a class="tab" href="ECE4011_Project_Proposal.pdf">.pdf</a></p>
+<p class="style5">Oral Proposal Presentation <a class="tab" href="Oral Proposal Presentation.pptx">.pptx</a>
+  <a class="tab" href="Oral Proposal Presentation.pdf">.pdf</a></p>
+<p class="style5">Project Summary <a class="tab" href="ECE_4011_Summary.docx">.docx</a>
+  <a class="tab" href="ECE_4011_Summary.pdf">.pdf</a></p>
+<p class="style5">Final Report <a class="tab" href="Final Report.docx">.docx</a>
+  <a class="tab" href="Final Report.pdf">.pdf</a></p>
+<p class="style5">&nbsp;</p>
+<td width="51%" height="198">
+    <div align="right">
+        <p class="style7", align="left"><a href="E1.jpg"><img src="E1.jpg" width="500" height="306" border="0"></a><br>
+            LR: Runfeng Chen and William Scott demonstrating our project to the "Buzz"</p>
+        <p class="style7", align="left"><a href="E2.jpg"><img src="E2.jpg" width="500" height="306" border="0"></a><br>
+            Our demo setup</p>
+    </div>
+</td>
+
+<p class="style5"> Additional Supporting Documentation:</p>
+<blockquote> 
+  <p><a class="tab" href="https://github.com/rogerxcn/resistive_nn_emulator">Github Repository</a><a class="tab" href="https://colab.research.google.com/drive/1asVOYRpuY8KrVCiPjsREBPbpFXF4hrs4
+">CoLab notebook for NN training</a><br></p>
+  </blockquote>
+<p class="style5">&nbsp;</p>
+<p class="style5">&nbsp;</p>
+<p class="style5">&nbsp;</p>
+
+</body></html>
